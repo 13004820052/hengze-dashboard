@@ -178,9 +178,9 @@ function updateCharts(){
       data:{
         labels:labels,
         datasets:[
+          {type:'bar',label:'净利润',data:nets,backgroundColor:colors[i][2],borderColor:colors[i][1],borderWidth:1,yAxisID:'y1',order:0},
           {type:'line',label:'实收金额',data:revs,borderColor:colors[i][0],backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.3,yAxisID:'y',order:1},
-          {type:'line',label:'投流产出',data:outs,borderColor:colors[i][1],backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.3,borderDash:[5,3],yAxisID:'y',order:1},
-          {type:'bar',label:'净利润',data:nets,backgroundColor:colors[i][2],borderColor:colors[i][1],borderWidth:1,yAxisID:'y1',order:0}
+          {type:'line',label:'投流产出',data:outs,borderColor:colors[i][1],backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.3,borderDash:[5,3],yAxisID:'y',order:1}
         ]
       },
       options:{
