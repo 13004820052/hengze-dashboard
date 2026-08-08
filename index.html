@@ -151,7 +151,7 @@ function updateCharts(){
   var labels=range.map(function(s){return M[s].lb;});
   var sn=['亿级棒-塞北','桓润-塞北','亿级棒-先马氏'];
   var sk=['yb','hr','xm'];
-  var colors=[['#3b82f6','#93c5fd','#bfdbfe'],['#10b981','#6ee7b7','#a7f3d0'],['#8b5cf6','#c4b5fd','#e9d5ff']];
+  var colors=[['#3b82f6','#93c5fd','rgba(147,197,253,0.3)'],['#10b981','#6ee7b7','rgba(110,231,183,0.3)'],['#8b5cf6','#c4b5fd','rgba(196,181,253,0.3)']];
   chartInstances.forEach(function(c){c.destroy();});chartInstances=[];
   var vc=document.getElementById('vc');
   vc.innerHTML=sn.map(function(nm,i){
