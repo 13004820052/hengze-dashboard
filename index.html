@@ -48,7 +48,16 @@ function rr(){
   var sc=['#3b82f6','#10b981','#8b5cf6'];
   var lb=['实收金额','投流消耗','投流产出','投流占比','Roi','净利润','利润率'];
   var cs=['c1','c1','c2','c3','c4','c5','c6'];
-  div.innerHTML=sn.map(function(nm,i){
+  var yb=D['yb']&&D['yb'][serial],hr=D['hr']&&D['hr'][serial],xm=D['xm']&&D['xm'][serial];
+  var sumHTML='';
+  if(yb&&hr&&xm){
+    var sumRev=yb[1]+hr[1]+xm[1],sumNet=yb[5]+hr[5]+xm[5];
+    sumHTML='<div class=\"k sm\"><h3>三店汇总</h3><div class=u>'+M[serial].lb+'</div>'+
+      '<div class=m><span class=l>实收金额</span><span class=\"v c5\">¥'+Math.round(sumRev).toLocaleString()+'</span></div>'+
+      '<div class=m><span class=l>净利润</span><span class=\"v c6\">¥'+Math.round(sumNet).toLocaleString()+'</span></div></div>';
+  }
+
+  div.innerHTML=sumHTML+sn.map(function(nm,i){
     var sd=D[sk[i]],m=sd&&sd[serial];
     if(!m)return'<div class=k><h3 style=color:'+sc[i]+'>'+nm+'</h3><div class=u>'+M[serial].lb+'</div><div class=e>暂无此日数据</div></div>';
     var vs=[m[1],m[0],m[2],m[3],m[4],m[5],m[6]];
@@ -62,15 +71,6 @@ function rr(){
     }
     return h+'</div>';
   }).join('');
-
-  var sd_all=D;
-  var yb=sd_all['yb']&&sd_all['yb'][serial],hr=sd_all['hr']&&sd_all['hr'][serial],xm=sd_all['xm']&&sd_all['xm'][serial];
-  if(yb&&hr&&xm){
-    var sumRev=yb[1]+hr[1]+xm[1],sumNet=yb[5]+hr[5]+xm[5];
-    div.innerHTML+='<div class=\"k sm\"><h3>三店汇总</h3><div class=u>'+M[serial].lb+'</div>'+
-      '<div class=m><span class=l>实收金额</span><span class=\"v c5\">¥'+Math.round(sumRev).toLocaleString()+'</span></div>'+
-      '<div class=m><span class=l>净利润</span><span class=\"v c6\">¥'+Math.round(sumNet).toLocaleString()+'</span></div></div>';
-  }
 }
 bu();rr();
 
