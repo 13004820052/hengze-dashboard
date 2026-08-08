@@ -4,7 +4,7 @@
 :root{--bg:#f5f6fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--blue:#3b82f6;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--purple:#8b5cf6;--teal:#14b8a6}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.c{max-width:1100px;margin:0 auto;padding:20px}
+.c{max-width:1200px;margin:0 auto;padding:20px}
 h1{text-align:center;font-size:22px;padding:20px 0 4px}
 h1+p{text-align:center;color:var(--muted);font-size:13px;margin-bottom:0}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:0 4px}
@@ -13,17 +13,24 @@ h1+p{text-align:center;color:var(--muted);font-size:13px;margin-bottom:0}
 .sel label{font-size:13px;font-weight:600;color:var(--muted);line-height:34px}
 .sel select{padding:8px 14px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;background:var(--card);min-width:80px}
 .g{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.k{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.k{background:var(--card);border:2px solid #e5e7eb;border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:border-color .3s}
+.k.warn{border-color:#fca5a5;background:#fef2f2}
 .k h3{font-size:15px;margin-bottom:2px}
 .k .u{font-size:11px;color:var(--muted);margin-bottom:14px}
 .k .e{text-align:center;padding:30px;color:var(--muted);font-size:13px}
-.m{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6}
+.m{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f3f4f6}
 .m:last-child{border-bottom:none}
-.m .l{font-size:12px;color:var(--muted)}
+.m .l{font-size:12px;color:var(--muted);min-width:110px}
+.m .r{display:flex;align-items:center;gap:6px}
 .m .v{font-size:15px;font-weight:700}
-.sum{text-align:center;padding:8px 16px;margin-bottom:14px;background:var(--card);border:1px solid #e5e7eb;border-radius:8px;font-size:14px;color:var(--muted)}
+.m .chg{font-size:10px;padding:1px 5px;border-radius:4px;white-space:nowrap}
+.chg.up{background:#d1fae5;color:#065f46}
+.chg.down{background:#fee2e2;color:#991b1b}
+.chg.flat{color:var(--muted)}
+.sum{text-align:center;padding:10px 16px;margin-bottom:8px;background:var(--card);border:1px solid #e5e7eb;border-radius:8px;font-size:14px;color:var(--muted)}
 .sum b{color:var(--text)}
-.sum i{font-style:normal;margin:0 12px;color:#d1d5db}
+.sum i{font-style:normal;margin:0 10px;color:#d1d5db}
+.sum .mt{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-size:13px;margin-top:8px;padding:8px 16px;border-radius:6px;display:inline-block;width:100%}
 .c1{color:var(--blue)}.c2{color:var(--purple)}.c3{color:var(--orange)}.c4{color:var(--teal)}.c5{color:var(--green)}.c6{color:var(--red)}
 .f{text-align:center;margin-top:28px;color:var(--muted);font-size:11px}
 .viz-range{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:20px;flex-wrap:wrap}
@@ -34,6 +41,7 @@ h1+p{text-align:center;color:var(--muted);font-size:13px;margin-bottom:0}
 .viz-charts .ch{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;padding:16px}
 .viz-charts .ch h3{font-size:14px;margin-bottom:10px}
 .viz-charts .ch canvas{max-height:320px}
+.viz-charts .ch.combined{border:2px solid #bfdbfe;background:#f8fafc}
 @media(max-width:768px){.g{grid-template-columns:1fr}.viz-charts{grid-template-columns:1fr}.top{flex-direction:column;gap:8px}.top .vsel{text-align:center}}
 </style></head><body>
 <div class="c"><h1>桓泽店铺数据看板</h1>
@@ -61,53 +69,71 @@ var S=46167,E=46241,M={},O={};
 for(var s=S;s<=E;s++){var d=new Date(2026,4,25);d.setDate(d.getDate()+(s-S));M[s]={m:d.getMonth()+1,dd:d.getDate(),lb:(d.getMonth()+1)+'/'+d.getDate()};}
 for(var s=S;s<=E;s++){var m=M[s].m;if(!O[m])O[m]=[];O[m].push(s);}
 var cmo=8,cd=5;
-function gs(){for(var s=S;s<=E;s++){if(M[s].m===cmo&&M[s].dd===cd)return s;}var a=O[cmo];return a?a[a.length-1]:E;}
+function curSerial(){for(var s=S;s<=E;s++){if(M[s].m===cmo&&M[s].dd===cd)return s;}var a=O[cmo];return a?a[a.length-1]:E;}
 function bu(){
   var ms=document.getElementById('ms'),ds=document.getElementById('ds');
   ms.innerHTML=Object.keys(O).map(function(m){return'<option value="'+m+'"'+(+m===cmo?' selected':'')+'>'+m+'月</option>';}).join('');
   var days=O[cmo]||[];
-  ds.innerHTML=days.map(function(s){var d=M[s];return'<option value="'+s+'"'+(s===gs()?' selected':'')+'>'+d.dd+'日</option>';}).join('');
-}
-var S=46167,E=46241,M={},O={};
-for(var s=S;s<=E;s++){var d=new Date(2026,4,25);d.setDate(d.getDate()+(s-S));M[s]={m:d.getMonth()+1,dd:d.getDate(),lb:(d.getMonth()+1)+'/'+d.getDate()};}
-for(var s=S;s<=E;s++){var m=M[s].m;if(!O[m])O[m]=[];O[m].push(s);}
-var cmo=8,cd=5;
-function gs(){for(var s=S;s<=E;s++){if(M[s].m===cmo&&M[s].dd===cd)return s;}var a=O[cmo];return a?a[a.length-1]:E;}
-function bu(){
-  var ms=document.getElementById('ms'),ds=document.getElementById('ds');
-  ms.innerHTML=Object.keys(O).map(function(m){return'<option value="'+m+'"'+(+m===cmo?' selected':'')+'>'+m+'月</option>';}).join('');
-  var days=O[cmo]||[];
-  ds.innerHTML=days.map(function(s){var d=M[s];return'<option value="'+s+'"'+(s===gs()?' selected':'')+'>'+d.dd+'日</option>';}).join('');
+  ds.innerHTML=days.map(function(s){var d=M[s];return'<option value="'+s+'"'+(s===curSerial()?' selected':'')+'>'+d.dd+'日</option>';}).join('');
 }
 function cm(){cmo=+document.getElementById('ms').value;var d=O[cmo];if(d&&d.length)cd=M[d[d.length-1]].dd;bu();rr();}
-function fm(v,d){if(v==null)return'-';return typeof v==='number'?v.toFixed(d||0):v;}
+function chgTag(cur,prev){if(prev==null||prev===0||cur==null)return'<span class="chg flat">-</span>';var p=((cur-prev)/Math.abs(prev)*100);if(Math.abs(p)<0.5)return'<span class="chg flat">→0%</span>';var cls=p>0?'up':'down',arrow=p>0?'↑':'↓';return'<span class="chg '+cls+'">'+arrow+Math.abs(p).toFixed(1)+'%</span>';}
 function rr(){
   var ds=document.getElementById('ds');if(ds.value){var s=parseInt(ds.value);if(M[s])cd=M[s].dd;}
-  var serial=gs(),div=document.getElementById('gs');
+  var serial=curSerial(),div=document.getElementById('gs');
   var sn=['亿级棒-塞北','桓润-塞北','亿级棒-先马氏'];
   var sk=['yb','hr','xm'];
   var sc=['#3b82f6','#10b981','#8b5cf6'];
   var lb=['实收金额','投流消耗','投流产出','投流占比','Roi','净利润','利润率'];
   var cs=['c1','c1','c2','c3','c4','c5','c6'];
-  var yb=D['yb']&&D['yb'][serial],hr=D['hr']&&D['hr'][serial],xm=D['xm']&&D['xm'][serial];
+  var icons=['💰 ','💸 ','📊 ','📈 ','🎯 ','🧾 ','📉 '];
+  // Collect data for current and comparison serials
+  var prevDay=serial-1,prevWeek=serial-7;
+  var allData={};
+  for(var i=0;i<3;i++){
+    var storeKey=sk[i];
+    allData[storeKey]={cur:D[storeKey]&&D[storeKey][serial]||null,prev:D[storeKey]&&D[storeKey][prevDay]||null,prevWk:D[storeKey]&&D[storeKey][prevWeek]||null};
+  }
+  // Month-to-date calculation
+  var monthSerials=O[cmo]||[];
+  var mtRev=0,mtNet=0,mtSpend=0;
+  for(var mi=0;mi<monthSerials.length;mi++){
+    var ms=monthSerials[mi];
+    if(ms>serial)break;
+    for(var si=0;si<3;si++){
+      var md=D[sk[si]]&&D[sk[si]][ms];
+      if(md){mtRev+=md[1];mtSpend+=md[0];mtNet+=md[5];}
+    }
+  }
+  // Summary bar
   var sumDiv=document.getElementById('sum');
-  if(yb&&hr&&xm){
-    var sumRev=yb[1]+hr[1]+xm[1],sumNet=yb[5]+hr[5]+xm[5];
+  var ybCur=allData['yb'].cur,hrCur=allData['hr'].cur,xmCur=allData['xm'].cur;
+  if(ybCur&&hrCur&&xmCur){
+    var sumRev=ybCur[1]+hrCur[1]+xmCur[1],sumNet=ybCur[5]+hrCur[5]+xmCur[5];
     var nc=sumNet>=0?'c5':'c6';
-    sumDiv.innerHTML=M[serial].lb+' · 三店合计<i>|</i>实收 <b>¥'+Math.round(sumRev).toLocaleString()+'</b><i>|</i>净利 <b class='+nc+'>¥'+Math.round(sumNet).toLocaleString()+'</b>';
+    var mtDays=0;for(var mi=0;mi<monthSerials.length;mi++){if(monthSerials[mi]>serial)break;mtDays++;}
+    sumDiv.innerHTML='<div>'+M[serial].lb+' · 三店合计<i>|</i>实收 <b>¥'+Math.round(sumRev).toLocaleString()+'</b><i>|</i>净利 <b class='+nc+'>¥'+Math.round(sumNet).toLocaleString()+'</b></div>'
+      +'<div class="mt">📅 '+cmo+'月累计(至'+M[serial].dd+'日,共'+mtDays+'天)<i>|</i>实收 <b>¥'+Math.round(mtRev).toLocaleString()+'</b><i>|</i>净利 <b class="'+(mtNet>=0?'c5':'c6')+'">¥'+Math.round(mtNet).toLocaleString()+'</b><i>|</i>日均实收 <b>¥'+(mtDays>0?Math.round(mtRev/mtDays).toLocaleString():0)+'</b></div>';
     sumDiv.style.display='';
   }else{sumDiv.style.display='none';}
+  // Cards
   div.innerHTML=sn.map(function(nm,i){
     var sd=D[sk[i]],m=sd&&sd[serial];
-    if(!m)return'<div class=k><h3 style=color:'+sc[i]+'>'+nm+'</h3><div class=u>'+M[serial].lb+'</div><div class=e>暂无此日数据</div></div>';
+    if(!m)return'<div class="k"><h3 style=color:'+sc[i]+'>'+nm+'</h3><div class="u">'+M[serial].lb+'</div><div class="e">暂无此日数据</div></div>';
     var vs=[m[1],m[0],m[2],m[3],m[4],m[5],m[6]];
     var fmts=['%d','%d','%d','%.1f%','%.2f','%d','%pct'];
     var units=['¥','¥','¥','%','','¥','%'];
-    var h='<div class=k><h3 style=color:'+sc[i]+'>'+nm+'</h3><div class=u>'+M[serial].lb+'</div>';
+    var ad=allData[sk[i]];
+    var prevVals=ad.prev?[ad.prev[1],ad.prev[0],ad.prev[2],ad.prev[3],ad.prev[4],ad.prev[5],ad.prev[6]]:null;
+    var prevWVals=ad.prevWk?[ad.prevWk[1],ad.prevWk[0],ad.prevWk[2],ad.prevWk[3],ad.prevWk[4],ad.prevWk[5],ad.prevWk[6]]:null;
+    var isNeg=m[5]<0;
+    var h='<div class="k'+(isNeg?' warn':'')+'"><h3 style=color:'+sc[i]+'>'+nm+'</h3><div class="u">'+M[serial].lb+'</div>';
     for(var j=0;j<7;j++){
       var v=vs[j],u=units[j],cl=cs[j],f=fmts[j];
       var txt=f.indexOf('%d')>=0?u+Math.round(v).toLocaleString():f.indexOf('%.1f')>=0?v.toFixed(1)+'%':f.indexOf('%pct')>=0?v.toFixed(2)+'%':f.indexOf('%.2f')>=0?v.toFixed(2):v.toFixed(2);
-      h+='<div class=m><span class=l>'+['💰 ','💸 ','📊 ','📈 ','🎯 ','🧾 ','📉 '][j]+lb[j]+'</span><span class="v '+cl+'">'+txt+'</span></div>';
+      var pv=prevVals?prevVals[j]:null;
+      var pw=prevWVals?prevWVals[j]:null;
+      h+='<div class="m"><span class="l">'+icons[j]+lb[j]+'</span><div class="r"><span class="v '+cl+'">'+txt+'</span>'+(j===0||j===1||j===2||j===5?chgTag(v,pv)+'<span style="font-size:10px;color:#9ca3af">昨</span>':'')+'</div></div>';
     }
     return h+'</div>';
   }).join('');
@@ -120,7 +146,6 @@ function initVizSelects(){
   var f=document.getElementById('vFrom'),t=document.getElementById('vTo');
   f.innerHTML=allSerials.map(function(s){return'<option value="'+s+'">'+M[s].lb+'</option>';}).join('');
   t.innerHTML=allSerials.map(function(s){return'<option value="'+s+'">'+M[s].lb+'</option>';}).join('');
-  // Default to last 7
   f.value=allSerials[Math.max(0,allSerials.length-7)];
   t.value=allSerials[allSerials.length-1];
 }
@@ -154,16 +179,48 @@ function updateCharts(){
   var colors=[['#3b82f6','#93c5fd','rgba(147,197,253,0.3)'],['#10b981','#6ee7b7','rgba(110,231,183,0.3)'],['#8b5cf6','#c4b5fd','rgba(196,181,253,0.3)']];
   chartInstances.forEach(function(c){c.destroy();});chartInstances=[];
   var vc=document.getElementById('vc');
-  vc.innerHTML=sn.map(function(nm,i){
-    var revs=[],outs=[],nets=[];
-    range.forEach(function(s){
-      var m=D[sk[i]]&&D[sk[i]][s];
-      revs.push(m?m[1]:null);
-      outs.push(m?m[2]:null);
-      nets.push(m?m[5]:null);
-    });
+  // Build HTML: combined chart first, then 3 store charts
+  var chartsHtml='<div class="ch combined"><h3 style="color:#1e40af">📊 三店合计</h3><canvas id="cCombined"></canvas></div>';
+  chartsHtml+=sn.map(function(nm,i){
     return'<div class="ch"><h3 style="color:'+colors[i][0]+'">'+nm+'</h3><canvas id="c'+i+'"></canvas></div>';
   }).join('');
+  vc.innerHTML=chartsHtml;
+
+  // === Combined chart ===
+  var combRev=[],combNet=[];
+  var ybRev=[],hrRev=[],xmRev=[];
+  range.forEach(function(s){
+    var yb=D['yb']&&D['yb'][s],hr=D['hr']&&D['hr'][s],xm=D['xm']&&D['xm'][s];
+    ybRev.push(yb?yb[1]:0);
+    hrRev.push(hr?hr[1]:0);
+    xmRev.push(xm?xm[1]:0);
+    combNet.push((yb?yb[5]:0)+(hr?hr[5]:0)+(xm?xm[5]:0));
+  });
+  var ctxC=document.getElementById('cCombined').getContext('2d');
+  var cCombined=new Chart(ctxC,{
+    type:'bar',
+    data:{
+      labels:labels,
+      datasets:[
+        {type:'bar',label:'亿级棒-塞北',data:ybRev,backgroundColor:'rgba(59,130,246,0.6)',borderColor:'#3b82f6',borderWidth:1,stack:'rev'},
+        {type:'bar',label:'桓润-塞北',data:hrRev,backgroundColor:'rgba(16,185,129,0.6)',borderColor:'#10b981',borderWidth:1,stack:'rev'},
+        {type:'bar',label:'亿级棒-先马氏',data:xmRev,backgroundColor:'rgba(139,92,246,0.6)',borderColor:'#8b5cf6',borderWidth:1,stack:'rev'},
+        {type:'line',label:'净利合计',data:combNet,borderColor:'#ef4444',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,tension:0.3,yAxisID:'y1',order:1}
+      ]
+    },
+    options:{
+      responsive:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{font:{size:11},usePointStyle:true,padding:12}}},
+      scales:{
+        y:{type:'linear',position:'left',title:{display:true,text:'实收(元)',font:{size:11}},ticks:{font:{size:10}},stacked:true},
+        y1:{type:'linear',position:'right',title:{display:true,text:'净利(元)',font:{size:11}},ticks:{font:{size:10}},grid:{drawOnChartArea:false}}
+      }
+    }
+  });
+  chartInstances.push(cCombined);
+
+  // === Individual store charts ===
   sn.forEach(function(nm,i){
     var revs=[],outs=[],nets=[];
     range.forEach(function(s){
