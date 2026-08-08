@@ -34,10 +34,10 @@ h1+p{text-align:center;color:var(--muted);font-size:13px;margin-bottom:0}
 .viz-charts .ch{background:var(--card);border:1px solid #e5e7eb;border-radius:12px;padding:16px}
 .viz-charts .ch h3{font-size:14px;margin-bottom:10px}
 .viz-charts .ch canvas{max-height:320px}
-@media(max-width:768px){.g{grid-template-columns:1fr}.viz-charts{grid-template-columns:1fr}}
+@media(max-width:768px){.g{grid-template-columns:1fr}.viz-charts{grid-template-columns:1fr}.top{flex-direction:column;gap:8px}.top .vsel{text-align:center}}
 </style></head><body>
-<div class="c">
-<div class="top"><p>选择日期查看各店经营数据</p><div class="vsel"><select id="viewSel" onchange="switchView()"><option value="detail">明细数据</option><option value="viz">可视化</option></select></div></div>
+<div class="c"><h1>桓泽店铺数据看板</h1>
+<div class="top"><p>选择日期查看各店经营数据</p><div class="vsel"><select id="viewSel" onchange="switchView()"><option value="detail">📊 明细数据</option><option value="viz">📈 可视化</option></select></div></div>
 <div id="detail">
 <div class="sel"><label>月份</label><select id="ms" onchange="cm()"></select><label>日期</label><select id="ds" onchange="rr()"></select></div>
 <div class="sum" id="sum"></div>
